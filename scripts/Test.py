@@ -12,7 +12,7 @@ test_transform = transforms.Compose([
 
 def load_model(model_path):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model = models.resnet18()
+    model = models.resnet18(weights=models.ResNet18_Weights.IMAGENET1K_V1)
     model.fc = nn.Sequential(
         nn.Linear(model.fc.in_features, 256),
         nn.ReLU(),
