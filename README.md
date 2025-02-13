@@ -10,7 +10,7 @@ We use a flask server and create an endpoint that takes in pictures, in the resp
 Ideally, the images should be resized locally before sending to the server to reduce bandwdith and upload times.
 
 NBA broadcasts are heavily compressed, usually in 1920x1080 resolution.
-The input image dimensions are 256x256, so resize the image to 224x126 and add 49 px padding on the top and bottom.
+The input image dimensions are 224x224, so resize the image to 224x126 and add 49 px padding on the top and bottom.
 
 The method of capturing screenshots is up to you: 
 
