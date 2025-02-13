@@ -4,7 +4,7 @@ Using two datasets:
 
 The screenshots, obtained through dubious methods, are hosted on Kaggle.
 
-We train a CNN to determine whether or not the class of a random screenshot is part of an NBA broadcast.
+We train a CNN to determine whether or not a random screenshot is part of an NBA broadcast.
 We use a flask server and create an endpoint that takes in pictures, in the response will be the class.
 
 Ideally, the images should be resized locally before sending to the server to reduce upload times.
