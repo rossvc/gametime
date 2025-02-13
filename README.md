@@ -2,8 +2,8 @@ Using two datasets:
 - Screenshots from NBA broadcasts (includes halftime presentations, stat cards, anything that is shown during a typical NBA game)
 - Screenshots of various commericals (Past 10 years of superbowl, current NBA, local and national commericals)
 
-We train a CNN to determine the likelihood of a random screenshot being a part of an NBA broadcast or not.
-We use a flask server and create an endpoint that takes in pictures, in the response will be the likelihood.
+We train a CNN to determine the class of a random screenshot being a part of an NBA broadcast or not.
+We use a flask server and create an endpoint that takes in pictures, in the response will be the class.
 
 Ideally, the images should be resized locally before sending to the server to reduce upload times.
 
