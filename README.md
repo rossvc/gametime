@@ -2,7 +2,7 @@ Using two datasets:
 - Screenshots from NBA broadcasts (includes halftime presentations, stat cards, and anything that is shown during a typical NBA game)
 - Screenshots of various commercials (Past 10 years of the Super Bowl, current NBA, local and national commercials)
 
-The screenshots, obtained through dubious methods, are hosted on Kaggle.
+The screenshots (arguably, we are using the broadcast for educational/research purposes, which gives us grounds for fair use), are hosted on Kaggle.
 
 We train a CNN to determine whether or not a random screenshot is part of an NBA broadcast.
 We use a flask server and create an endpoint that takes in pictures, in the response will be the class.
