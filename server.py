@@ -20,7 +20,6 @@ def load_model(model_path):
         nn.ReLU(),
         nn.Dropout(0.3),
         nn.Linear(256, 1),
-        nn.Sigmoid()
     )
     
     model.load_state_dict(torch.load(model_path, map_location=device))
@@ -33,7 +32,7 @@ model = load_model(model_path)
 
 transform = transforms.Compose([
     transforms.Resize((224, 126)),
-    transforms.Pad((0, 49)),
+    transforms.Pad((49, 0)),
     transforms.ToTensor(),
     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
 ])
@@ -43,7 +42,7 @@ def predict_single_image(model, image_bytes):
     image = transform(image).unsqueeze(0).to(device)
     with torch.no_grad():
         output = model(image)
-        probability = output.item()
+        probability = torch.sigmoid(output).item()
         predicted_class = 1 if probability > 0.5 else 0
     return predicted_class, probability
 

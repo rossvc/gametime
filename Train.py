@@ -8,16 +8,17 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 train_transform = transforms.Compose([
     transforms.Resize((224, 126)),
-    transforms.Pad((0, 49)),
+    transforms.Pad((49, 0)),
     transforms.RandomHorizontalFlip(),
     transforms.RandomRotation(15),
+    transforms.ColorJitter(brightness=0.2, contrast=0.2),
     transforms.ToTensor(),
     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
 ])
 
 val_transform = transforms.Compose([
     transforms.Resize((224, 126)),
-    transforms.Pad((0, 49)),
+    transforms.Pad((49, 0)),
     transforms.ToTensor(),
     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
 ])
@@ -44,7 +45,6 @@ model.fc = nn.Sequential(
     nn.ReLU(),
     nn.Dropout(0.3),
     nn.Linear(256, 1),
-    nn.Sigmoid()
 )
 
 for param in model.parameters():
@@ -59,7 +59,7 @@ if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model = model.to(device)
 
-    criterion = nn.BCELoss()
+    criterion = nn.BCEWithLogitsLoss()
     optimizer = optim.Adam([
         {'params': model.layer4.parameters(), 'lr': 1e-4},
         {'params': model.fc.parameters(), 'lr': 1e-3}
@@ -85,7 +85,8 @@ if __name__ == '__main__':
             optimizer.step()
             
             train_loss += loss.item() * inputs.size(0)
-            train_correct += ((outputs > 0.5).float() == labels).sum().item()
+            preds = torch.sigmoid(outputs) > 0.5
+            train_correct += (preds.float() == labels).sum().item()
 
         model.eval()
         val_loss = 0.0
@@ -100,7 +101,8 @@ if __name__ == '__main__':
                 loss = criterion(outputs, labels)
                 
                 val_loss += loss.item() * inputs.size(0)
-                val_correct += ((outputs > 0.5).float() == labels).sum().item()
+                preds = torch.sigmoid(outputs) > 0.5
+                val_correct += (preds.float() == labels).sum().item()
 
         train_loss = train_loss / len(train_dataset)
         train_acc = train_correct / len(train_dataset)

@@ -5,7 +5,7 @@ from torchvision import datasets, transforms, models
 
 test_transform = transforms.Compose([
     transforms.Resize((224, 126)),
-    transforms.Pad((0, 49)),
+    transforms.Pad((49, 0)),
     transforms.ToTensor(),
     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
 ])
@@ -18,7 +18,6 @@ def load_model(model_path):
         nn.ReLU(),
         nn.Dropout(0.3),
         nn.Linear(256, 1),
-        nn.Sigmoid()
     )
     model.load_state_dict(torch.load(model_path, map_location=device))
     model.to(device)
@@ -42,6 +41,7 @@ if __name__ == '__main__':
             labels = labels.to(device).float().unsqueeze(1)
             
             outputs = model(inputs)
-            correct += ((outputs > 0.5).float() == labels).sum().item()
+            preds = torch.sigmoid(outputs) > 0.5
+            correct += (preds.float() == labels).sum().item()
     
     print(f'Test Accuracy: {correct / len(test_dataset):.2%}')
